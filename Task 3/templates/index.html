@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8" />
+<title>Cat vs Dog SVM</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+
+<body>
+  <h1>Cat 🐱 or Dog 🐶 ?</h1>
+
+  <form method="POST" enctype="multipart/form-data">
+    <input required type="file" name="image" accept="image/*" />
+    <button>Predict</button>
+  </form>
+</body>
+</html>
