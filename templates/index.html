@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>House‑Price Predictor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="card">
+    <h1>Predict a House Price</h1>
+    <form method="POST">
+      <label>
+        Square footage
+        <input type="number" name="sqft" step="1" min="1" required />
+      </label>
+
+      <label>
+        Bedrooms
+        <input type="number" name="bedrooms" step="1" min="0" required />
+      </label>
+
+      <label>
+        Bathrooms
+        <input type="number" name="bathrooms" step="1" min="0" required />
+      </label>
+
+      <button type="submit">Estimate</button>
+    </form>
+
+    {% if prediction %}
+      <p class="result">Estimated price: <strong>{{ prediction }}</strong></p>
+    {% endif %}
+  </div>
+</body>
+</html>
+

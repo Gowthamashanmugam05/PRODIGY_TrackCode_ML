@@ -1,0 +1,54 @@
+body{
+  font-family:sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  background:#f5f8ff;
+  margin:0;
+}
+
+.card{
+  background:white;
+  padding:2rem 3rem;
+  border-radius:1rem;
+  box-shadow:0 4px 14px rgba(0,0,0,0.1);
+  width:320px;
+}
+
+h1{font-size:1.4rem;margin-top:0;}
+
+label{
+  display:block;
+  margin-bottom:1rem;
+  font-size:.9rem;
+}
+
+input{
+  width:100%;
+  padding:.4rem .6rem;
+  margin-top:.25rem;
+  border:1px solid #bbb;
+  border-radius:.4rem;
+  font-size:1rem;
+}
+
+button{
+  width:100%;
+  padding:.6rem;
+  border:none;
+  background:#0066ff;
+  color:white;
+  font-size:1rem;
+  border-radius:.4rem;
+  cursor:pointer;
+}
+
+button:hover{background:#004dcc;}
+
+.result{
+  margin-top:1.5rem;
+  font-size:1.1rem;
+  text-align:center;
+}
+
