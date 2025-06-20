@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Customer Segmentation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Customer Segmentation using K‑Means (k = {{ k }})</h1>
+
+      <img src="data:image/png;base64,{{ img_b64 }}" alt="Cluster plot" />
+
+      <h2>Cluster Centres</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Cluster</th>
+            <th>Annual Income (k$)</th>
+            <th>Spending Score (1‑100)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in centres %}
+          <tr>
+            <td>{{ c.cluster }}</td>
+            <td>{{ c.income }}</td>
+            <td>{{ c.score }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <p class="note">Change the number of clusters via the URL, e.g. <code>/clusters/4</code>.</p>
+    </div>
+  </body>
+</html>
+
