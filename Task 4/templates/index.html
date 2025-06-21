@@ -1,0 +1,81 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hand Gesture Recognition</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    /* --- quick inline styles (can be moved to style.css) --------------- */
+    body   { text-align:center; font-family:Arial, sans-serif; }
+    #wrap  { position:relative; display:inline-block; }
+    #roiBox{
+      position:absolute;
+      border:3px dashed #00bfff;
+      width:200px; height:200px;     /* ROI square */
+      top:70px; left:60px;           /* tweak to centre on your webcam feed */
+      pointer-events:none;           /* allow clicks on video */
+    }
+    button{ margin-top:12px; padding:10px 20px; font-size:16px; }
+  </style>
+</head>
+<body>
+
+  <h1>Gesture Recognition</h1>
+
+  <!-- video + ROI overlay -->
+  <div id="wrap">
+    <video id="video" width="320" height="240" autoplay></video>
+    <div  id="roiBox"></div>
+  </div>
+
+  <br>
+  <button onclick="captureImage()">Capture & Predict</button>
+
+  <!-- hidden 64×64 canvas (exact size for SVM) -->
+  <canvas id="canvas" width="64" height="64" style="display:none;"></canvas>
+
+  <p>Prediction: <span id="result">None</span></p>
+
+  <script>
+    /* ------------------------------------------------------------------
+       1. Start webcam
+    ------------------------------------------------------------------ */
+    const video = document.getElementById('video');
+    navigator.mediaDevices.getUserMedia({ video:true })
+      .then(stream => video.srcObject = stream)
+      .catch(err   => alert("Webcam access denied"));
+
+    /* ------------------------------------------------------------------
+       2. Capture, crop to ROI, downscale to 64×64, POST to /predict
+    ------------------------------------------------------------------ */
+    function captureImage(){
+      /* ROI settings must match #roiBox */
+      const roi = { x:60, y:70, w:200, h:200 };
+
+      /* temp canvas for ROI crop */
+      const tmp   = document.createElement('canvas');
+      tmp.width   = roi.w;
+      tmp.height  = roi.h;
+      const tctx  = tmp.getContext('2d');
+      tctx.drawImage(video, roi.x, roi.y, roi.w, roi.h, 0, 0, roi.w, roi.h);
+
+      /* 64×64 canvas to feed the model */
+      const c64   = document.getElementById('canvas');
+      const ctx64 = c64.getContext('2d');
+      ctx64.drawImage(tmp, 0, 0, 64, 64);
+
+      const dataURL = c64.toDataURL('image/png');
+
+      fetch('/predict', {
+        method : 'POST',
+        headers: { 'Content-Type':'application/json' },
+        body   : JSON.stringify({ image:dataURL })
+      })
+      .then(r => r.json())
+      .then(d => document.getElementById('result').innerText = d.prediction_name)
+      .catch(err => console.error(err));
+    }
+  </script>
+</body>
+</html>
